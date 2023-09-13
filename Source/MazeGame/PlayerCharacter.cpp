@@ -65,8 +65,8 @@ void APlayerCharacter::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 
 	if (!bLevelEnded) {
-		const FVector CubeForce = FVector(ForwardForce, 0.0f, 0.0f);
-		Cube->AddForce(CubeForce, NAME_None, true);
+		//const FVector CubeForce = FVector(ForwardForce, 0.0f, 0.0f);
+		//Cube->AddForce(CubeForce, NAME_None, true);
 		if (Cube->GetComponentLocation().Z < KillZ)
 		{
 			PlayerDied();
@@ -78,14 +78,14 @@ void APlayerCharacter::Tick(float DeltaTime) {
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	if (UEIC* EnhancedInputComponent = CastChecked<UEIC>(PlayerInputComponent)) {
-		if (MoveAction) {
-			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this,
-				&APlayerCharacter::MoveRightLeft);
+		if (MoveRightLeft) {
+			EnhancedInputComponent->BindAction(MoveRightLeft, ETriggerEvent::Triggered, this,
+				&APlayerCharacter::Move);
 		}
 	}
 }
 
-void APlayerCharacter::MoveRightLeft(const FInputActionValue& Value) {
+void APlayerCharacter::Move(const FInputActionValue& Value) {
 	const float MovementAxis = Value.Get<float>();
 
 	if (!bLevelEnded) {

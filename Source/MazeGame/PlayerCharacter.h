@@ -43,9 +43,9 @@ protected:
 	UInputMappingContext* InputMappingContext;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UInputAction* MoveAction;
+	UInputAction* MoveRightLeft;
 
-	void MoveRightLeft(const FInputActionValue& Value);
+	void Move(const FInputActionValue& Value);
 
 	// ASSET COMPONENTS
 
