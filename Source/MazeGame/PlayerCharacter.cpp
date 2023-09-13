@@ -86,10 +86,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value) {
-	const float MovementAxis = Value.Get<float>();
+	const FVector2D MovementAxis = Value.Get<FVector2D>();
 
 	if (!bLevelEnded) {
-		const FVector CubeForce = FVector(0.0f, MovementAxis * SideForce, 0.0f);
+		const FVector CubeForce = FVector(MovementAxis.X * SideForce, MovementAxis.Y * SideForce, 0.0f);
 		Cube->AddForce(CubeForce, NAME_None, true);
 	}
 }

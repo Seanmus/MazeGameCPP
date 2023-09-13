@@ -44,6 +44,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* MoveRightLeft;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* MoveForwardBackward;
 
 	void Move(const FInputActionValue& Value);
 
