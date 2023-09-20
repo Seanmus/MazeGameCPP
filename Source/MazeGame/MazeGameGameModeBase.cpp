@@ -35,6 +35,19 @@ void AMazeGameGameModeBase::NextLevel()
 	}
 }
 
+AMazeGameGameModeBase::AMazeGameGameModeBase()
+{
+	PrimaryActorTick.bCanEverTick = true;
+	UE_LOG(LogTemp, Warning, TEXT("Constructor on game mode called."));
+}
+
+void AMazeGameGameModeBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	time += DeltaTime;
+	UE_LOG(LogTemp, Warning, TEXT("Time : %f |"), time);
+}
+
 void AMazeGameGameModeBase::LevelCompleted()
 {
 	if (DefaultLevelCompleteWidget) {

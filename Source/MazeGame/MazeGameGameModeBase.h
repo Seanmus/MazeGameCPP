@@ -18,6 +18,8 @@ protected:
 	virtual void BeginPlay() override;
 	void NextLevel();
 public:
+	AMazeGameGameModeBase();
+	virtual void Tick(float DeltaTime) override;
 	void LevelCompleted();
 	void GameCompleted(bool PlayerWon);
 	void IncreaseScore(float ScoreToAdd);
@@ -39,6 +41,9 @@ protected:
 	TSubclassOf<UUserWidget> DefaultGameCompleteWidget;
 	UPROPERTY()
 	UUserWidget* GameCompleteWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float time = 0;
 
 	FTimerHandle LevelSwapTimer;
 };
