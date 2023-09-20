@@ -45,7 +45,6 @@ void AMazeGameGameModeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	time += DeltaTime;
-	UE_LOG(LogTemp, Warning, TEXT("Time : %f |"), time);
 }
 
 void AMazeGameGameModeBase::LevelCompleted()

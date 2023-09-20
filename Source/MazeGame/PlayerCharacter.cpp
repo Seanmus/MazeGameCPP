@@ -40,8 +40,6 @@ void APlayerCharacter::BeginPlay() {
 	{
 	}
 
-
-
 	if (const APlayerController* PlayerController = Cast<APlayerController>(GetController())) {
 		const ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer();
 		if (UEILPS* SubSystem = ULocalPlayer::GetSubsystem<UEILPS>(LocalPlayer)) {
@@ -71,10 +69,6 @@ void APlayerCharacter::Tick(float DeltaTime) {
 		{
 			PlayerDied();
 		}
-		Cube->SetPhysicsLinearVelocity(Cube->GetPhysicsLinearVelocity() * 0.9f);
-		
-		//
-
 	}
 }
 
@@ -91,7 +85,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::Move(const FInputActionValue& Value) {
 	const FVector2D MovementAxis = Value.Get<FVector2D>();
-	UE_LOG(LogTemp, Warning, TEXT("Move called"));
 	if (!bLevelEnded) {
 		const FVector CubeForce = FVector(MovementAxis.X * SideForce, MovementAxis.Y * SideForce, 0.0f);
 		Cube->AddForce(CubeForce, NAME_None, true);
