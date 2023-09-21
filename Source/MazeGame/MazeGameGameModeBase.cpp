@@ -78,4 +78,5 @@ void AMazeGameGameModeBase::IncreaseScore(float ScoreToAdd)
 {
 	PlayerScore += ScoreToAdd;
 	UE_LOG(LogTemp, Warning, TEXT("Score : %f |"), PlayerScore);
+	ScoreIncreased.Broadcast(PlayerScore);
 }

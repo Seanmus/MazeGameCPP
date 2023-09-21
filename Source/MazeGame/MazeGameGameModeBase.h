@@ -10,6 +10,8 @@
 /**
  * 
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScoreIncreased, int32, Score);
+
 UCLASS()
 class MAZEGAME_API AMazeGameGameModeBase : public AGameModeBase
 {
@@ -44,6 +46,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float time = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintAssignable)
+	FScoreIncreased ScoreIncreased;
 
 	FTimerHandle LevelSwapTimer;
 };
