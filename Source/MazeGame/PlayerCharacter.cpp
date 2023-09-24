@@ -58,6 +58,13 @@ void APlayerCharacter::BeginPlay() {
 		Cube->OnComponentHit.AddDynamic(this, &APlayerCharacter::OnHit);
 		Cube->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBeginOverlap);
 	}
+
+	if (DefaultPauseMenuWidget) {
+		PauseMenuWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultPauseMenuWidget);
+		if (PauseMenuWidget) {
+			PauseMenuWidget->AddToViewport();
+		}
+	}
 }
 
 // Called every frame
@@ -99,19 +106,7 @@ void APlayerCharacter::Move(const FInputActionValue& Value) {
 
 void APlayerCharacter::Pause(const FInputActionValue& Value)
 {
-	if (DefaultPauseMenuWidget) {
-		if (PauseMenuWidget) {
-			PauseMenuWidget->RemoveFromParent();
-			PauseMenuWidget = NULL;
-		}
-		else {
-			PauseMenuWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultPauseMenuWidget);
-			if (PauseMenuWidget) {
-				PauseMenuWidget->AddToViewport();
-			}
-		}
 
-	}
 }
 
 void APlayerCharacter::PlayerDied()
@@ -119,11 +114,6 @@ void APlayerCharacter::PlayerDied()
 	bLevelEnded = true;
 	Cube->SetPhysicsLinearVelocity({ 0, 0, 0 });
 	GetWorldTimerManager().SetTimer(PlayerDiedTimer, [this]() {GameMode->GameCompleted(false); }, 2.0f, false);
-	//GetWorldTimerManager().SetTimer(PlayerDiedTimer,[this](bool bGameOver) {GameMode->GameCompleted(bGameOver); }, 2.0f, false);
-	//GetWorldTimerManager().SetTimer(PlayerDiedTimer, this, &APlayerCharacter::GameOver, 2.0f);
-	//GameMode->GameCompleted(false);
-	//Cube->SetWorldLocationAndRotation(PlayerSpawn, FRotator(0, 0, 0));
-	//Cube->SetWorldLocation(PlayerSpawn);
 }
 
 
