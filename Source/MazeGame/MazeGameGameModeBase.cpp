@@ -44,7 +44,7 @@ AMazeGameGameModeBase::AMazeGameGameModeBase()
 void AMazeGameGameModeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	time += DeltaTime;
+	time -= DeltaTime;
 }
 
 void AMazeGameGameModeBase::LevelCompleted()

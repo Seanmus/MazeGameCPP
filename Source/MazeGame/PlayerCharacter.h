@@ -45,11 +45,17 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* MoveRightLeft;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UInputAction* MoveForwardBackward;
+	UInputAction* PauseInput;
 
 	void Move(const FInputActionValue& Value);
+	void Pause(const FInputActionValue& Value);
 
 	// ASSET COMPONENTS
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
+		TSubclassOf<UUserWidget> DefaultPauseMenuWidget;
+	UPROPERTY()
+		UUserWidget* PauseMenuWidget;
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
 	UStaticMeshComponent* Cube;

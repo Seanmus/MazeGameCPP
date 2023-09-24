@@ -7,6 +7,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
 #include "MazeGameInstance.h"
 #include "MazeGameGameModeBase.h"
 
@@ -80,6 +82,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			EnhancedInputComponent->BindAction(MoveRightLeft, ETriggerEvent::Triggered, this,
 				&APlayerCharacter::Move);
 		}
+		if (PauseInput) {
+			EnhancedInputComponent->BindAction(PauseInput, ETriggerEvent::Triggered, this,
+				&APlayerCharacter::Pause);
+		}
 	}
 }
 
@@ -88,6 +94,23 @@ void APlayerCharacter::Move(const FInputActionValue& Value) {
 	if (!bLevelEnded) {
 		const FVector CubeForce = FVector(MovementAxis.X * SideForce, MovementAxis.Y * SideForce, 0.0f);
 		Cube->AddForce(CubeForce, NAME_None, true);
+	}
+}
+
+void APlayerCharacter::Pause(const FInputActionValue& Value)
+{
+	if (DefaultPauseMenuWidget) {
+		if (PauseMenuWidget) {
+			PauseMenuWidget->RemoveFromParent();
+			PauseMenuWidget = NULL;
+		}
+		else {
+			PauseMenuWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultPauseMenuWidget);
+			if (PauseMenuWidget) {
+				PauseMenuWidget->AddToViewport();
+			}
+		}
+
 	}
 }
 
