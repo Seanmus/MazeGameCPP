@@ -16,16 +16,8 @@ class MAZEGAME_API UMazeGameInstance : public UGameInstance
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray < TSoftObjectPtr<UWorld>> Worlds;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int32 CurrentLevel = 0;
+	TArray <int32> HighScores;
 
 public:
-	void LoadNextLevel();
-	bool IsPlayerOnFinalLevel() const;
 
-	UFUNCTION(BlueprintCallable, Category = "Input Mode")
-	void SetInputMode(bool GameOnly) const;
-	UFUNCTION(BlueprintCallable, Category = "Game Levels")
-	void LoadFirstLevel();
 };

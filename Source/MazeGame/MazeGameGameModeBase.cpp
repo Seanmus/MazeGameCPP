@@ -19,19 +19,11 @@ void AMazeGameGameModeBase::BeginPlay()
 			HUDWidget->AddToViewport();
 		}
 	}
-}
-
-void AMazeGameGameModeBase::NextLevel()
-{
-	if (GameInstance->IsPlayerOnFinalLevel()) {
-		if (LevelCompleteWidget) {
-			LevelCompleteWidget->RemoveFromViewport();
+	if (DefaultPauseMenuWidget) {
+		PauseMenuWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultPauseMenuWidget);
+		if (PauseMenuWidget) {
+			PauseMenuWidget->AddToViewport();
 		}
-
-		GameCompleted(true);
-	}
-	else {
-		GameInstance->LoadNextLevel();
 	}
 }
 
@@ -44,33 +36,33 @@ AMazeGameGameModeBase::AMazeGameGameModeBase()
 void AMazeGameGameModeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	time -= DeltaTime;
-}
-
-void AMazeGameGameModeBase::LevelCompleted()
-{
-	if (DefaultLevelCompleteWidget) {
-		LevelCompleteWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultLevelCompleteWidget);
-		if (LevelCompleteWidget) {
-			LevelCompleteWidget->AddToViewport();
+	if (!GameOver) {
+		time -= DeltaTime;
+		if (time <= 10 && !timerWarningEffectTriggered) 
+		{
+			UGameplayStatics::PlaySound2D(GetWorld(), TimerSoundEffect, 1, 1, 0);
+			timerWarningEffectTriggered = true;
+		}
+		if (time <= 0) {
+			time = 0;
+			GameCompleted();
 		}
 	}
-	GetWorldTimerManager().SetTimer(LevelSwapTimer, this, &AMazeGameGameModeBase::NextLevel, 2.0f);
 }
 
-void AMazeGameGameModeBase::GameCompleted(bool PlayerWon)
+
+void AMazeGameGameModeBase::GameCompleted()
 {
-	GameInstance->SetInputMode(false);
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+	if (HUDWidget) {
+		HUDWidget->RemoveFromParent();
+	}
+
 	if (DefaultGameCompleteWidget) {
 		GameCompleteWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultGameCompleteWidget);
 		if (GameCompleteWidget) {
 			GameCompleteWidget->AddToViewport();
 		}
-		UTextBlock* LostOrComplete = Cast<UTextBlock>(GameCompleteWidget->GetWidgetFromName(FName("LostOrComplete")));
-		const FText EndStateMessage = PlayerWon ? FText::FromString("You Won!") : FText::FromString("You Lost!");
-	}
-	else {
-
 	}
 }
 

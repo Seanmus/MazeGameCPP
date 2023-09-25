@@ -18,27 +18,28 @@ class MAZEGAME_API AMazeGameGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 protected:
 	virtual void BeginPlay() override;
-	void NextLevel();
 public:
 	AMazeGameGameModeBase();
 	virtual void Tick(float DeltaTime) override;
-	void LevelCompleted();
-	void GameCompleted(bool PlayerWon);
+	void GameCompleted();
 	void IncreaseScore(float ScoreToAdd);
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GameState")
+	bool GameOver = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerStats")
 	float PlayerScore;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UMazeGameInstance* GameInstance;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
-	TSubclassOf<UUserWidget> DefaultLevelCompleteWidget;
-	UPROPERTY()
-	UUserWidget* LevelCompleteWidget;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
 	TSubclassOf<UUserWidget> DefaultHUDWidget;
 	UPROPERTY()
 	UUserWidget* HUDWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
+	TSubclassOf<UUserWidget> DefaultPauseMenuWidget;
+	UPROPERTY()
+	UUserWidget* PauseMenuWidget;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
 	TSubclassOf<UUserWidget> DefaultGameCompleteWidget;
 	UPROPERTY()
@@ -46,6 +47,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float time = 0;
+	bool timerWarningEffectTriggered = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	USoundBase* TimerSoundEffect;
+
 
 	UPROPERTY(EditAnywhere, BlueprintAssignable)
 	FScoreIncreased ScoreIncreased;

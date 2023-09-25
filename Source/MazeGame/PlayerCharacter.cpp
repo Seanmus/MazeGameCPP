@@ -18,7 +18,6 @@ using UEIC = UEnhancedInputComponent;
 // Sets default values
 APlayerCharacter::APlayerCharacter() {
 
-	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	Cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube"));
@@ -30,18 +29,12 @@ APlayerCharacter::APlayerCharacter() {
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
-	PlayerSpawn = Cube->GetComponentLocation();
 
 }
 
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay() {
 	Super::BeginPlay();
-	GameMode = CastChecked<AMazeGameGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (GameMode)
-	{
-	}
-
 	if (const APlayerController* PlayerController = Cast<APlayerController>(GetController())) {
 		const ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer();
 		if (UEILPS* SubSystem = ULocalPlayer::GetSubsystem<UEILPS>(LocalPlayer)) {
@@ -53,32 +46,11 @@ void APlayerCharacter::BeginPlay() {
 			}
 		}
 	}
-
-	if (Cube) {
-		Cube->OnComponentHit.AddDynamic(this, &APlayerCharacter::OnHit);
-		Cube->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBeginOverlap);
-	}
-
-	if (DefaultPauseMenuWidget) {
-		PauseMenuWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultPauseMenuWidget);
-		if (PauseMenuWidget) {
-			PauseMenuWidget->AddToViewport();
-		}
-	}
 }
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
-
-	if (!bLevelEnded) {
-		//const FVector CubeForce = FVector(ForwardForce, 0.0f, 0.0f);
-		//Cube->AddForce(CubeForce, NAME_None, true);
-		if (Cube->GetComponentLocation().Z < KillZ)
-		{
-			PlayerDied();
-		}
-	}
 }
 
 // Called to bind functionality to input
@@ -89,54 +61,14 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			EnhancedInputComponent->BindAction(MoveRightLeft, ETriggerEvent::Triggered, this,
 				&APlayerCharacter::Move);
 		}
-		if (PauseInput) {
-			EnhancedInputComponent->BindAction(PauseInput, ETriggerEvent::Triggered, this,
-				&APlayerCharacter::Pause);
-		}
 	}
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value) {
 	const FVector2D MovementAxis = Value.Get<FVector2D>();
-	if (!bLevelEnded) {
-		const FVector CubeForce = FVector(MovementAxis.X * SideForce, MovementAxis.Y * SideForce, 0.0f);
-		Cube->AddForce(CubeForce, NAME_None, true);
-	}
-}
-
-void APlayerCharacter::Pause(const FInputActionValue& Value)
-{
-
-}
-
-void APlayerCharacter::PlayerDied()
-{
-	bLevelEnded = true;
-	Cube->SetPhysicsLinearVelocity({ 0, 0, 0 });
-	GetWorldTimerManager().SetTimer(PlayerDiedTimer, [this]() {GameMode->GameCompleted(false); }, 2.0f, false);
-}
-
-
-
-void APlayerCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
-	FVector NormalImpulse, const FHitResult& Hit) {
-	//if (OtherActor && OtherActor->IsA(AObstacle::StaticClass())) {
-	//	PlayerDied();
-	//}
-}
-
-void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-	//if (OtherActor && OtherActor->IsA(AEndPoint::StaticClass())) {
-	//	bLevelEnded = true;
-	//	Cube->SetPhysicsLinearVelocity(Cube->GetPhysicsLinearVelocity() * 0.9f);
-	//	GameMode->LevelCompleted();
-	//}
-}
-
-void APlayerCharacter::GameOver()
-{
-	GameMode->GameCompleted(false);
+	const FVector CubeForce = FVector(MovementAxis.X * MoveForce, MovementAxis.Y * MoveForce, 0.0f);
+	Cube->AddForce(CubeForce, NAME_None, true);
+	
 }
 
 

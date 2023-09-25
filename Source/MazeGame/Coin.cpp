@@ -43,3 +43,7 @@ void ACoin::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	}
 }
 
+FLinearColor ACoin::ReturnColourWithRedBasedOnScore() {
+	return FLinearColor(float(Score) / 1000, 1 - float(Score) / 500, 1 - float(Score) / 500);
+}
+

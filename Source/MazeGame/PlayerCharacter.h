@@ -48,15 +48,8 @@ protected:
 	UInputAction* PauseInput;
 
 	void Move(const FInputActionValue& Value);
-	void Pause(const FInputActionValue& Value);
 
 	// ASSET COMPONENTS
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
-		TSubclassOf<UUserWidget> DefaultPauseMenuWidget;
-	UPROPERTY()
-		UUserWidget* PauseMenuWidget;
-
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
 	UStaticMeshComponent* Cube;
 
@@ -67,34 +60,7 @@ protected:
 	UCameraComponent* Camera;
 
 	// MOVEMENT VARIABLES
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	float ForwardForce = 1800.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
-	float SideForce = 1800.0f;
-
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	bool bLevelEnded = false;
-
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	float KillZ = -1000;
-
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	FVector PlayerSpawn;
-
-	UPROPERTY()
-	AMazeGameGameModeBase* GameMode;
-
-	FTimerHandle PlayerDiedTimer;
-
-	void PlayerDied();
-
-	UFUNCTION() // Required to bind to dynamic multi-cast delegate.
-		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
-
-	UFUNCTION() // The names of these functions don't matter, but the signature does.
-		void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-	void GameOver();
+	float MoveForce = 1800.0f;
 };
